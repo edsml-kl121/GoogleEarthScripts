@@ -11,3 +11,5 @@ var button = ui.Button({
   }
 });
 print(button);
+
+var checkbox = ui.Checkbox('Show Sentinel 2', true);
