@@ -1,15 +1,15 @@
-var label = ui.Label('My GEE Label!');
-print(label);
+// var label = ui.Label('My GEE Label!');
+// print(label);
 
-var label = ui.Label('This app\ncalculates area \nas well as parameter', {whiteSpace: 'pre'});
-print(label);
+// var label = ui.Label('This app\ncalculates area \nas well as parameter', {whiteSpace: 'pre'});
+// print(label);
 
-var button = ui.Button({
-  label: 'Zoom to Kolhumadulu',
-  onClick: function() {
-    Map.setCenter(2.266393578083512, 73.22899822178088);
-  }
-});
-print(button);
+// var button = ui.Button({
+//   label: 'Zoom to Kolhumadulu',
+//   onClick: function() {
+//     Map.setCenter(2.266393578083512, 73.22899822178088);
+//   }
+// });
+// print(button);
 
 var checkbox = ui.Checkbox('Show Sentinel 2', true);
