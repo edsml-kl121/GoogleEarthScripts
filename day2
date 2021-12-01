@@ -1,0 +1,2 @@
+var label = ui.Label('My GEE Label!');
+print(label);
