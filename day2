@@ -1,2 +1,5 @@
 var label = ui.Label('My GEE Label!');
 print(label);
+
+var label = ui.Label('This app\ncalculates area \nas well as parameter', {whiteSpace: 'pre'});
+print(label);
