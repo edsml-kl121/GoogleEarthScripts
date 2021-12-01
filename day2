@@ -7,7 +7,7 @@ print(label);
 var button = ui.Button({
   label: 'Zoom to Kolhumadulu',
   onClick: function() {
-    Map.setCenter(2.266393578083512, 73.22899822178088,15);
+    Map.setCenter(2.266393578083512, 73.22899822178088);
   }
 });
 print(button);
