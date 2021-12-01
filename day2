@@ -13,3 +13,8 @@
 // print(button);
 
 var checkbox = ui.Checkbox('Show Sentinel 2', true);
+
+checkbox.onChange(function(checked) {
+  // Shows or hides the first map layer based on the checkbox's value.
+  Map.layers().get(0).setShown(checked);
+});
