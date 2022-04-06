@@ -1,0 +1,7 @@
+var l8 = ee.ImageCollection("LANDSAT/LC8_L1T_TOA");
+
+var thai = l8.filterDate("2016-01-01", "2016-12-31")
+              .filter(ee.Filter.eq("WRS_PATH", 130))
+              .filter(ee.Filter.eq("WRS_ROW", 50));
+              
+console.log("hi")
