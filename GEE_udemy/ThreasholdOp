@@ -1,0 +1,16 @@
+var thailand = ee.FeatureCollection("USDOS/LSIB_SIMPLE/2017")
+  .filter(ee.Filter.eq('country_na', 'Thailand'));
+
+print(ee.ImageCollection("MODIS/006/MOD44B"))
+var fc = ee.ImageCollection("MODIS/006/MOD44B")
+      .select("Percent_Tree_Cover").median()
+      .clipToCollection(thailand);
+
+print(fc)
+
+// Map.addLayer(fc);
+
+var zones = fc.gt(30).add(fc.gt(60)).add(fc.gte(75));
+zones = zones.updateMask(zones.neq(0));
+
+Map.addLayer(zones);
