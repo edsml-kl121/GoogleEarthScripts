@@ -1,0 +1,14 @@
+// Get a feature collection of Japan
+// var japan = ee.FeatureCollection('ft:1tdSwUL7MVpOauSgRzqVTOwdfy17KDbw-1d9omPw')
+var thailand = ee.FeatureCollection("USDOS/LSIB_SIMPLE/2017")
+  .filter(ee.Filter.eq('country_na', 'Thailand'));
+
+// Load the NDVI image for 2007.
+var collection = ee.ImageCollection("LANDSAT/LC8_L1T_ANNUAL_EVI")
+      .filterDate("2016-01-01", "2016-04-30");
+
+var mean = collection.mean()
+var roi = mean.clip(thailand)
+// extent of japan 
+Map.setCenter(101.06,16,7);
+Map.addLayer(roi);
