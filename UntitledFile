@@ -1,2 +1,8 @@
-var label = ui.Label('My GEE Label!');
-print(label);
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = /* color: #d63000 */ee.Geometry.Polygon(
+        [[[99.71481221529838, 14.288311558057329],
+          [99.69283955904838, 13.242591561249666],
+          [101.60446065279838, 13.231897137015087],
+          [101.58248799654838, 14.267017594569687],
+          [100.62667744967338, 14.575581696391612]]]);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
