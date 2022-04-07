@@ -3,7 +3,7 @@ var modis = ee.Image(ee.ImageCollection('MODIS/006/MOD13A1').first())
     .select('NDVI');
     
 // Display the NDVI image in Sabah.
-Map.setCenter(101.84,4.85,9);
+Map.setCenter(101.84,16,9);
 Map.addLayer(modis, {min: 2000, max: 5000}, 'MODIS ndvi');    
 
 // Get information about the MODIS projection.
