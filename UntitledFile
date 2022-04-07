@@ -6,3 +6,16 @@ var geometry = /* color: #d63000 */ee.Geometry.Polygon(
           [101.58248799654838, 14.267017594569687],
           [100.62667744967338, 14.575581696391612]]]);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
+var image = ee.Image().byte()
+      .paint(geometry, 0)
+      .paint(geometry, 1, 5)
+Map.addLayer(image, {min: 0, max: 4, palette: ["red", "yellow", "blue", "green"]})
+var c = ee.FeatureCollection((ee.Feature(geometry)))
+var img = ee.Image("srtm90_v4")
+      .visualize({min: 0, max: 3000, palette: ["green", "yellow"]})
+var d1 = c.draw("red")
+var result = ee.ImageCollection([img,d1]).mosaic()
+// Map.setCenter(116.84, 4.85, 9)
+Map.centerObject(image, 9)
+
+Map.addLayer(result)
