@@ -1,0 +1,15 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = /* color: #98ff00 */ee.Geometry.Point([101.0067055425401, 16.000589355315384]);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+// Get a feature collection of Japan
+// var japan = ee.FeatureCollection('ft:1tdSwUL7MVpOauSgRzqVTOwdfy17KDbw-1d9omPw')
+var thailand = ee.FeatureCollection("USDOS/LSIB_SIMPLE/2017")
+  .filter(ee.Filter.eq('country_na', 'Thailand'));
+
+// Load the NDVI image for 2007.
+var n2007 = ee.Image('LANDSAT/LT5_L1T_ANNUAL_EVI/2007');
+
+var roi = n2007.clip(thailand); //clip will clip raster to the
+// extent of japan 
+Map.setCenter(101.06,16,7);
+Map.addLayer(roi);
