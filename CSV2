@@ -1,0 +1,3 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var table = ee.FeatureCollection("users/minervas_jojo_code/KHM_polygons");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
