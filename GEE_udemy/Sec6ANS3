@@ -1,30 +1,24 @@
 // The input image to reduce, in this case an SRTM elevation map.
-var dataset = ee.ImageCollection('LANDSAT/LC08/C01/T1_8DAY_NDVI')
-                  .filterDate('2014-01-01', '2014-12-31');
-// print(dataset.first())
-var listOfImages = dataset.toList(dataset.size());
+var nl2011 = ee.Image('NOAA/DMSP-OLS/NIGHTTIME_LIGHTS/F152011')
+  .select('stable_lights');
 
-var image = listOfImages.get(1);
-print(listOfImages.get(0))
-print(dataset.first())
-
-var image = dataset.first()
+// var image = dataset.first()
 // var img2 = listOfImages[1];
 // var image = ee.Image(dataset.select(0));
 // var image = dataset.last()
 // print(image1, image)
 
 // The region to reduce within.
-var jp = ee.FeatureCollection('USDOS/LSIB_SIMPLE/2017').
+var th = ee.FeatureCollection('USDOS/LSIB_SIMPLE/2017').
               filter(ee.Filter.eq('country_na', 'Thailand'));
 
 // Reduce the image within the given region, using a reducer that
 // computes the max pixel value.  We also specify the spatial
 // resolution at which to perform the computation, in this case 1000
 // meters.
-var max = image.reduceRegion({
+var max = nl2011.reduceRegion({
   reducer: ee.Reducer.max(),
-  geometry: jp,
+  geometry: th,
   scale: 1000,
   maxPixels: 1e9
 });
