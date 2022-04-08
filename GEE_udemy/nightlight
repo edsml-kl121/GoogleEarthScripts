@@ -20,7 +20,7 @@ print(landcover)
 print(nl2001)
 print(nl2012)
 print(nlDiff)
-print(nlDiff.stable_lights)
+print(nlDiff.select("stable_lights"))
 
 // Grouped a mean reducer: change of nightlights by land cover category.
 var means = nlDiff.reduceRegion({
