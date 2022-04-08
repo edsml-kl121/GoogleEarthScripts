@@ -6,21 +6,22 @@ Map.centerObject(th);
 // Map.addLayer(amzn, {color: 'red'}, 'geodesic polygon');
 
 //fire 
-var dataset = ee.ImageCollection('FIRMS').select('confidence')
+var dataset = ee.ImageCollection('LANDSAT/LC08/C01/T1_8DAY_NDVI')
 
-var years = ee.List.sequence(2003,2016) // list of yrs from 2003-16
+var month = ee.List.sequence(1,12) // list of yrs from 2003-16
+print(month)
  
-var maps = ee.ImageCollection(years.map(function(year){
-var startDate = ee.Date.fromYMD(year,1,1)
-var endDate = ee.Date.fromYMD(year,12,31)
-var myImg = dataset.filter(ee.Filter.date(startDate,endDate)).max().gt(100).set("system:time_start",startDate)
+var maps = ee.ImageCollection(month.map(function(month){
+var startDate = ee.Date.fromYMD(2014,month,1)
+var endDate = ee.Date.fromYMD(2014,month,28)
+var myImg = dataset.filter(ee.Filter.date(startDate,endDate)).max().set("system:time_start",startDate)
 return myImg
 }))
 
 
 print(ui.Chart.image.seriesByRegion({imageCollection:maps,
 regions:th,
-reducer:ee.Reducer.count(),//count 
+reducer:ee.Reducer.max(),//count 
 scale:1000}).setOptions({title: 'Fire count',
 lineWidth: 1,
 pointSize: 3}));
