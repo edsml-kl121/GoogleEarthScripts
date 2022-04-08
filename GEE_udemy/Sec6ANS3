@@ -1,7 +1,8 @@
 // The input image to reduce, in this case an SRTM elevation map.
-var nl2011 = ee.Image('NOAA/DMSP-OLS/NIGHTTIME_LIGHTS/F152011')
-  .select('stable_lights');
-
+var dataset = ee.ImageCollection('NOAA/DMSP-OLS/NIGHTTIME_LIGHTS')
+                  .filter(ee.Filter.date('2011-01-01', '2011-12-31'));
+var nighttimeLights = dataset.first().select('stable_lights');
+print(nighttimeLights)
 // var image = dataset.first()
 // var img2 = listOfImages[1];
 // var image = ee.Image(dataset.select(0));
@@ -16,7 +17,7 @@ var th = ee.FeatureCollection('USDOS/LSIB_SIMPLE/2017').
 // computes the max pixel value.  We also specify the spatial
 // resolution at which to perform the computation, in this case 1000
 // meters.
-var max = nl2011.reduceRegion({
+var max = nighttimeLights.reduceRegion({
   reducer: ee.Reducer.max(),
   geometry: th,
   scale: 1000,
