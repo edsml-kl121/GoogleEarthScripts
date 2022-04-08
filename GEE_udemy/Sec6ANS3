@@ -1,30 +1,33 @@
+// The input image to reduce, in this case an SRTM elevation map.
+var dataset = ee.ImageCollection('LANDSAT/LC08/C01/T1_8DAY_NDVI')
+                  .filterDate('2014-01-01', '2014-12-31');
+// print(dataset.first())
+var listOfImages = dataset.toList(dataset.size());
+
+var image = listOfImages.get(1);
+print(listOfImages.get(0))
+print(dataset.first())
+
+var image = dataset.first()
+// var img2 = listOfImages[1];
+// var image = ee.Image(dataset.select(0));
+// var image = dataset.last()
+// print(image1, image)
+
 // The region to reduce within.
-var th = ee.FeatureCollection('USDOS/LSIB_SIMPLE/2017').
+var jp = ee.FeatureCollection('USDOS/LSIB_SIMPLE/2017').
               filter(ee.Filter.eq('country_na', 'Thailand'));
 
-Map.centerObject(th);  
-// Map.addLayer(amzn, {color: 'red'}, 'geodesic polygon');
+// Reduce the image within the given region, using a reducer that
+// computes the max pixel value.  We also specify the spatial
+// resolution at which to perform the computation, in this case 1000
+// meters.
+var max = image.reduceRegion({
+  reducer: ee.Reducer.max(),
+  geometry: jp,
+  scale: 1000,
+  maxPixels: 1e9
+});
 
-//fire 
-var dataset = ee.Image('NOAA/DMSP-OLS/NIGHTTIME_LIGHTS/F152011')
-  .select('stable_lights');
-
-var month = ee.List.sequence(1,12) // list of yrs from 2003-16
-print(month)
- 
-var maps = ee.ImageCollection(month.map(function(month){
-var startDate = ee.Date.fromYMD(2014,month,1)
-var endDate = ee.Date.fromYMD(2014,month,28)
-var myImg = dataset.filter(ee.Filter.date(startDate,endDate)).max().set("system:time_start",startDate)
-return myImg
-}))
-
-
-print(ui.Chart.image.seriesByRegion({imageCollection:maps,
-regions:th,
-reducer:ee.Reducer.max(),//count 
-scale:1000}).setOptions({title: 'Fire count',
-lineWidth: 1,
-pointSize: 3}));
- 
-Map.addLayer(maps.max().clip(th), {min:0,max:1,palette:['red']}, 'Fires');
+// Print the result (a Dictionary) to the console.
+print(max);
