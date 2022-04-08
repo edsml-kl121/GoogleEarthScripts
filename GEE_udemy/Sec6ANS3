@@ -6,7 +6,8 @@ Map.centerObject(th);
 // Map.addLayer(amzn, {color: 'red'}, 'geodesic polygon');
 
 //fire 
-var dataset = ee.ImageCollection('LANDSAT/LC08/C01/T1_8DAY_NDVI')
+var dataset = ee.Image('NOAA/DMSP-OLS/NIGHTTIME_LIGHTS/F152011')
+  .select('stable_lights');
 
 var month = ee.List.sequence(1,12) // list of yrs from 2003-16
 print(month)
