@@ -2,7 +2,8 @@
 var input = ee.Image('LANDSAT/LE7_TOA_1YEAR/2001');
 
 // Define a region in which to generate a sample of the input.
-var region = ee.FeatureCollection('ft:1et5l9_DRJ8oHKWPvlN95Q1xzAveLfALDjxOGfSa3');
+var region = ee.FeatureCollection('USDOS/LSIB_SIMPLE/2017').
+              filter(ee.Filter.eq('country_na', 'Thailand'));
 
 // Display the sample region.
 Map.setCenter(99.12,15.15, 10); 
@@ -16,7 +17,7 @@ var training = input.sample({
 });
 
 // Instantiate the clusterer and train it.
-var clusterer = ee.Clusterer.wekaKMeans(8).train(training);
+var clusterer = ee.Clusterer.wekaKMeans(5).train(training);
 
 // Cluster the input using the trained clusterer.
 var result = input.cluster(clusterer);
