@@ -1,3 +1,17 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = 
+    /* color: #d63000 */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[99.19296029702429, 15.549799611977937],
+          [99.19296029702429, 15.188299062918318],
+          [99.86724618569616, 15.188299062918318],
+          [99.86724618569616, 15.549799611977937]]], null, false);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 // The input image to reduce, in this case an SRTM elevation map.
 var dataset = ee.ImageCollection('NOAA/DMSP-OLS/NIGHTTIME_LIGHTS')
                   .filter(ee.Filter.date('2011-01-01', '2011-12-31'));
@@ -10,15 +24,16 @@ print(nighttimeLights)
 // print(image1, image)
 
 // The region to reduce within.
-var th = ee.FeatureCollection('USDOS/LSIB_SIMPLE/2017').
-              filter(ee.Filter.eq('country_na', 'Thailand'));
+// var th = ee.FeatureCollection('USDOS/LSIB_SIMPLE/2017').
+//               filter(ee.Filter.eq('country_na', 'Thailand'));
+var th = ee.FeatureCollection(geometry);
 
 // Reduce the image within the given region, using a reducer that
 // computes the max pixel value.  We also specify the spatial
 // resolution at which to perform the computation, in this case 1000
 // meters.
 var max = nighttimeLights.reduceRegion({
-  reducer: ee.Reducer.max(),
+  reducer: ee.Reducer.mean(),
   geometry: th,
   scale: 1000,
   maxPixels: 1e9
