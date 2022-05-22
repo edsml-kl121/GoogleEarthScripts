@@ -14,10 +14,10 @@ Map.setCenter(99.12,15.15, 6);
 // Compute the Normalized Difference Vegetation Index (NDVI).
 var nir = image.select('B3');
 var red = image.select('B5');
-var ndvi = nir.subtract(red).divide(nir.add(red)).rename('NDWI');
+var ndwi = nir.subtract(red).divide(nir.add(red)).rename('NDWI');
 
 // Display the result.
 // Map.centerObject(image, 9);
 var ndviParams = {min: -1, max: 1, palette: ['green', 'white', 'blue']};
-Map.addLayer(ndvi, ndviParams, 'NDVI image');
+Map.addLayer(ndwi, ndviParams, 'NDWI image');
 
