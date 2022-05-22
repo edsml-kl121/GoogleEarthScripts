@@ -6,21 +6,8 @@ var region = ee.FeatureCollection('USDOS/LSIB_SIMPLE/2017').
               filter(ee.Filter.eq('country_na', 'Thailand'));
 
 // Display the sample region.
+// // Make a handy variable of visualization parameters.
+var ndwi = region.normalizedDifference(["B3","B5"]);
 Map.setCenter(99.12,15.15, 10); 
-Map.addLayer(ee.Image().paint(region, 0, 2), {}, 'region');
+Map.addLayer(ndwi, "NDWI", false);
 
-// Make the training dataset.
-var training = input.sample({
-  region: region,
-  scale: 30,
-  numPixels: 5000
-});
-
-// Instantiate the clusterer and train it.
-var clusterer = ee.Clusterer.wekaKMeans(5).train(training);
-
-// Cluster the input using the trained clusterer.
-var result = input.cluster(clusterer);
-
-// Display the clusters with random colors.
-Map.addLayer(result.randomVisualizer(), {}, 'clusters');
