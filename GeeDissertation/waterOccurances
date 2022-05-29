@@ -1,0 +1,8 @@
+var gsw = ee.Image('JRC/GSW1_0/GlobalSurfaceWater');
+// var occurrence = gsw.select('occurrence');
+// Map.addLayer(occurrence);
+print("print image",gsw)
+
+// Get information about the bands as a list.
+var bandNames = gsw.bandNames();
+print('Band names:', bandNames);  // ee.List of band names
