@@ -51,7 +51,7 @@ var trained = ee.Classifier.smileCart().train(training, label, bands);
 var classified = image.select(bands).classify(trained);
 
 // Display the inputs and the results.
-Map.setCenter(-122.0877, 37.7880, 11);
+Map.setCenter(99.12,15.15, 6); 
 Map.addLayer(image,
              {bands: ['SR_B4', 'SR_B3', 'SR_B2'], min: 0, max: 0.25},
              'image');
