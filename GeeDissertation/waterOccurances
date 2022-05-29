@@ -6,3 +6,15 @@ print("print image",gsw)
 // Get information about the bands as a list.
 var bandNames = gsw.bandNames();
 print('Band names:', bandNames);  // ee.List of band names
+
+// Get projection information from band 1.
+var b1proj = gsw.select('change_abs').projection();
+print('Band 1 projection:', b1proj);  // ee.Projection object
+
+print(gsw.projection())
+
+// Get scale (in meters) information from band 1.
+var b1scale = gsw.projection().nominalScale();
+print('Band 1 scale:', b1scale);  // ee.Number
+
+print(gsw.select("occurrence"))
