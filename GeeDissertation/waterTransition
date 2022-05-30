@@ -13,28 +13,29 @@ var geometry =
           [105.48152283274428, 11.482638600703725]]], null, false);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var gsw = ee.Image('JRC/GSW1_0/GlobalSurfaceWater');
+print(gsw)
 
-Map.setCenter(105.26, 11.2134, 9);     // Mekong River Basin, SouthEast Asia
-// Map.addLayer({
-//   eeObject: gsw,
-//   name: 'Transition classes (1984-2015)',
-// });
+// Map.setCenter(105.26, 11.2134, 9);     // Mekong River Basin, SouthEast Asia
+// // Map.addLayer({
+// //   eeObject: gsw,
+// //   name: 'Transition classes (1984-2015)',
+// // });
 
 var transition = gsw.select("transition")
-// print(gsw)
+// // print(gsw)
 
 var area_image_with_transition_class = ee.Image.pixelArea().addBands(transition);
 
-// var reduction_results = area_image_with_transition_class.reduceRegion({
-//   reducer: ee.Reducer.sum().group({
-//     groupField: 1,
-//     groupName: 'transition_class_value',
-//   }),
-//   geometry: geometry,
-//   scale: 30,
-//   bestEffort: true,
-// });
-// print('reduction_results', area_image_with_transition_class);
+// // var reduction_results = area_image_with_transition_class.reduceRegion({
+// //   reducer: ee.Reducer.sum().group({
+// //     groupField: 1,
+// //     groupName: 'transition_class_value',
+// //   }),
+// //   geometry: geometry,
+// //   scale: 30,
+// //   bestEffort: true,
+// // });
+// // print('reduction_results', area_image_with_transition_class);
 var reduction_results = area_image_with_transition_class.reduceRegion({
   reducer: ee.Reducer.sum().group({
     groupField: 1,
@@ -44,4 +45,84 @@ var reduction_results = area_image_with_transition_class.reduceRegion({
   scale: 30,
   bestEffort: true,
 });
-print('reduction_results', reduction_results);
+// print('reduction_results', reduction_results);
+
+var roi_stats = ee.List(reduction_results.get('groups'));
+// print(roi_stats)
+
+//////////////////////////////////////////////////////////////
+// Calculations
+//////////////////////////////////////////////////////////////
+print(ee.List(gsw.get('transition_class_values')))
+
+function numToString(num) {
+  return ee.String(num)
+}
+
+print( ee.List(gsw.get('transition_class_values')).map(numToString))
+// Create a dictionary for looking up names of transition classes.
+var lookup_names = ee.Dictionary.fromLists(
+    ee.List(gsw.get('transition_class_values')).map(numToString),
+    gsw.get('transition_class_names')
+);
+// Create a dictionary for looking up colors of transition classes.
+var lookup_palette = ee.Dictionary.fromLists(
+    ee.List(gsw.get('transition_class_values')).map(numToString),
+    gsw.get('transition_class_palette')
+);
+
+print("lookup names", lookup_names)
+
+print("lookup palette", lookup_palette)
+
+//////////////////////////////////////////////////////////////
+// Helper functions
+//////////////////////////////////////////////////////////////
+
+// Create a feature for a transition class that includes the area covered.
+function createFeature(transition_class_stats) {
+  transition_class_stats = ee.Dictionary(transition_class_stats);
+  var class_number = transition_class_stats.get('transition_class_value');
+  var result = {
+      transition_class_number: class_number,
+      transition_class_name: lookup_names.get(class_number),
+      transition_class_palette: lookup_palette.get(class_number),
+      area_m2: transition_class_stats.get('sum')
+  };
+  return ee.Feature(null, result);   // Creates a feature without a geometry.
+}
+
+
+// Create a JSON dictionary that defines piechart colors based on the
+// transition class palette.
+// https://developers.google.com/chart/interactive/docs/gallery/piechart
+function createPieChartSliceDictionary(fc) {
+  return ee.List(fc.aggregate_array("transition_class_palette"))
+    .map(function(p) { return {'color': p}; }).getInfo();
+}
+
+// Convert a number to a string. Used for constructing dictionary key lists
+// from computed number objects.
+function numToString(num) {
+  return ee.Number(num).format();
+}
+
+print(roi_stats)
+print(roi_stats.map(createFeature))
+
+var transition_fc = ee.FeatureCollection(roi_stats.map(createFeature));
+print('transition_fc', transition_fc);
+
+// Add a summary chart.
+var transition_summary_chart = ui.Chart.feature.byFeature({
+    features: transition_fc,
+    xProperty: 'transition_class_name',
+    yProperties: ['area_m2', 'transition_class_number']
+  })
+  .setChartType('PieChart')
+  .setOptions({
+    title: 'Summary of transition class areas',
+    slices: createPieChartSliceDictionary(transition_fc),
+    sliceVisibilityThreshold: 0  // Don't group small slices.
+  });
+print(transition_summary_chart);
