@@ -1,0 +1,47 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = 
+    /* color: #98ff00 */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[105.18351868235365, 11.482638600703725],
+          [105.18351868235365, 11.259147090801196],
+          [105.48152283274428, 11.259147090801196],
+          [105.48152283274428, 11.482638600703725]]], null, false);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var gsw = ee.Image('JRC/GSW1_0/GlobalSurfaceWater');
+
+Map.setCenter(105.26, 11.2134, 9);     // Mekong River Basin, SouthEast Asia
+// Map.addLayer({
+//   eeObject: gsw,
+//   name: 'Transition classes (1984-2015)',
+// });
+
+var transition = gsw.select("transition")
+// print(gsw)
+
+var area_image_with_transition_class = ee.Image.pixelArea().addBands(transition);
+
+// var reduction_results = area_image_with_transition_class.reduceRegion({
+//   reducer: ee.Reducer.sum().group({
+//     groupField: 1,
+//     groupName: 'transition_class_value',
+//   }),
+//   geometry: geometry,
+//   scale: 30,
+//   bestEffort: true,
+// });
+// print('reduction_results', area_image_with_transition_class);
+var reduction_results = area_image_with_transition_class.reduceRegion({
+  reducer: ee.Reducer.sum().group({
+    groupField: 1,
+    groupName: 'transition_class_value',
+  }),
+  geometry: geometry,
+  scale: 30,
+  bestEffort: true,
+});
+print('reduction_results', reduction_results);
